@@ -1,0 +1,11 @@
+<h2 class="center-header">EDIT ISSUE #{{issue.issueid}}</h2>
+
+<form method="post" action="./{{issue.issueid}}/update">
+  {{>validationSummary}}
+  <div class="issue">
+      <div class="issue-header edit-issue-title"><input class="form-control" name="title" placeholder="Issue title"  value="{{issue.title}}" required="required" autofocus="autofocus" /></div>
+      <div class="issue-body"><textarea class="form-control" name="description" placeholder="Issue description" required="required" autofocus="autofocus">{{issue.description}}</textarea></div>
+      <div class="issue-footer"></div>
+  </div>
+  <button type="submit" class="button-link center-button">Update</button>
+</form>

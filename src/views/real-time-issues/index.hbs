@@ -1,0 +1,60 @@
+<h1 class="center-header">ISSUES</h1>
+
+<div id="issue-list">
+    {{#if issues.length }}
+    {{#each issues}}
+    <div class="issue" id="issueid_{{this.issueid}}">
+        <div class="issue-header">
+            {{#if this.done}}
+                <form method="post" action="./{{this.issueid}}/reopen" target="hiddenFrame">
+                    <button type="submit"><img src="./img/check.png"></button>
+                </form>
+            {{else}}
+                <form method="post" action="./{{this.issueid}}/close" target="hiddenFrame">
+                    <button type="submit"></button>
+                </form>
+            {{/if}}
+            <h3>{{this.title}}</h3>
+            <img src="{{this.userAvatar}}" class="avatar">
+            <h4 class="user-info">{{this.userFullname}} ({{this.userUsername}})</h4>
+        </div>
+        <div class="issue-body"><p>{{this.description}}</p></div>
+        <div class="issue-footer">
+            <ul>
+                <li>
+                    <a type="button" class="button-link" href="./{{this.issueid}}/edit" role="button">Edit</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <p>No Issues yet.</p>
+    {{/if}}
+    <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+</div>
+
+<template id="issue-template">
+    <div class="issue-header">
+        \{{#if this.done}}
+            <form method="post" action="./\{{this.issueid}}/reopen" target="hiddenFrame">
+                <button type="submit"><img src="./img/check.png"></button>
+            </form>
+        \{{else}}
+            <form method="post" action="./\{{this.issueid}}/close" target="hiddenFrame">
+                <button type="submit"> </button>
+            </form>
+        \{{/if}}
+        <h3>\{{this.title}}</h3>
+        <img src="\{{this.userAvatar}}" class="avatar">
+        <h4 class="user-info">\{{this.userFullname}} (\{{this.userUsername}})</h4>
+    </div>
+    <div class="issue-body"><p>\{{this.description}}</p></div>
+    <div class="issue-footer">
+        <ul>
+            <li>
+                <a type="button" class="button-link" href="./\{{this.issueid}}/edit" role="button">Edit</a>
+            </li>
+        </ul>
+    </div>
+</template>

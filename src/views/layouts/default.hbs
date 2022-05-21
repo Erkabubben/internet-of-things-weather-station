@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <base href="{{baseURL}}" />
+  <title>Real Time Issues</title>
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <script type="module" src="./js/index.js"></script>
+</head>
+
+<body>
+    <div id="background"></div>
+    {{>header}}
+    <main role="main" class="container">
+      {{>flash}}
+      {{{body}}}
+    </main>
+    {{>footer}}
+
+    <!-- Socket.io: Using Handlebars as the template engine on the client. -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+</body>
+</html>
