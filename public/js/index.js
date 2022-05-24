@@ -1,11 +1,9 @@
 import '../socket.io/socket.io.js'
 
-const issueTemplate = document.querySelector('#issue-template')
-
 const baseURL = document.querySelector('base').getAttribute('href')
 
 // Create a Handlebars template from the template-tag (rendered from index.hbs)
-const hbsTemplate = window.Handlebars.compile(issueTemplate.innerHTML)
+//const hbsTemplate = window.Handlebars.compile(issueTemplate.innerHTML)
 
 // Create a socket connection using Socket.io
 const socket = window.io({path: `${baseURL}socket.io`})
@@ -41,4 +39,5 @@ socket.on('update', arg => {
     const humText = document.querySelector('#hum')
     tempText.textContent = "TEMPERATURE: " + arg.temperature;
     humText.textContent = "HUMIDITY: " + arg.humidity;
+    window.updateMainChart()
 })
