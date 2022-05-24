@@ -20,8 +20,9 @@ import http from 'http'
 import { Server } from 'socket.io'
 import fetch from 'node-fetch'
 
-import { connectDB } from './config/influx.js'
 import influx from 'influx'
+import { connectDB } from './config/influx.js'
+import { client } from './config/influx.js'
 
 /**
  * The main function of the application.
@@ -170,13 +171,33 @@ const main = async () => {
       const responseTextSplit = responseText.split(';')
       console.log(responseText)
 
+      await client.writePoints([
+        {
+          measurement: 'readings',
+          tags: {},
+          fields: { temperature: responseTextSplit[0], humidity: responseTextSplit[1] }
+        }
+      ])
+
+      const results = await client.query(`
+        select * from readings
+        order by time desc
+        limit 3
+      `)
+
+      console.log(Date.now())
+
+      console.log(results)
+
       // Socket.io: Send the updated issue to all subscribers.
       io.emit('update', {
         temperature: responseTextSplit[0],
         humidity: responseTextSplit[1]
       })
     }
-  }, 3000 ) ;
+  }, 30000 )
+
+  console.log(await client.getMeasurements())
 }
 
 main().catch(console.error)

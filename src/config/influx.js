@@ -11,6 +11,8 @@ import influx from 'influx'
 // const CONNECTION_STRING = 'mongodb://localhost:27017/<name>'
 // const DB_CONNECTION_STRING = 'mongodb+srv://<dbuser>:<password>@<cluster>.mongodb.net/<name>?retryWrites=true&w=majority'
 
+export let client = undefined
+
 /**
  * Establishes a connection to a database.
  *
@@ -31,7 +33,7 @@ export const connectDB = async () => {
   })
 
   // Connect to the server.
-  const client = new influx.InfluxDB({
+  client = new influx.InfluxDB({
     database: 'readings_db',
     host: 'localhost',
     port: process.env.INFLUXDB_PORT,
@@ -77,13 +79,14 @@ export const connectDB = async () => {
       {
         measurement: 'readings',
         tags: {},
-        fields: { temperature: 0, humidity: 0 },
-        timestamp: Date.now()
+        fields: { temperature: 0, humidity: 0 }
       }
     ])
 
     console.log(await client.getMeasurements())
+
   }
 
   return client
 }
+
