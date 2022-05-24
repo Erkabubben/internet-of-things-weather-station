@@ -8,16 +8,6 @@
 
 import fetch from 'node-fetch'
 
-setInterval(async function ( ) {
-  const url = 'http://192.168.0.107/readings'
-  const response = await fetch(url, {
-    method: 'GET'
-  })
-  if (response.status === 200) {
-    console.log(await response.text())
-  }
-}, 3000 ) ;
-
 /**
  * Encapsulates a controller.
  */

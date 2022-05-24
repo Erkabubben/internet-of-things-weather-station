@@ -23,6 +23,7 @@
     "express-session": "^1.17.1",
     "helmet": "^4.3.1",
     "http-errors": "^1.8.0",
+    "influx": "^5.9.3",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",

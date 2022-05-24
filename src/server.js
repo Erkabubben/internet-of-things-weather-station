@@ -18,11 +18,18 @@ import { router } from './routes/router.js'
 // Socket.io: To add Socket.io support
 import http from 'http'
 import { Server } from 'socket.io'
+import fetch from 'node-fetch'
+
+import { connectDB } from './config/influx.js'
+import influx from 'influx'
 
 /**
  * The main function of the application.
  */
 const main = async () => {
+  // Checks that database is functional (no use starting the application otherwise).
+  const influxdb = await connectDB()
+
   // Creates an Express application.
   const app = express()
 
@@ -152,6 +159,24 @@ const main = async () => {
     console.log(`Server running at http://localhost:${process.env.PORT}`)
     console.log('Press Ctrl-C to terminate...')
   })
+
+  setInterval(async function () {
+    const url = 'http://192.168.0.107/readings'
+    const response = await fetch(url, {
+      method: 'GET'
+    })
+    if (response.status === 200) {
+      const responseText = await response.text()
+      const responseTextSplit = responseText.split(';')
+      console.log(responseText)
+
+      // Socket.io: Send the updated issue to all subscribers.
+      io.emit('update', {
+        temperature: responseTextSplit[0],
+        humidity: responseTextSplit[1]
+      })
+    }
+  }, 3000 ) ;
 }
 
 main().catch(console.error)

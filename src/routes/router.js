@@ -8,15 +8,11 @@
 
 import express from 'express'
 import createError from 'http-errors'
-import { router as issuesRouter } from './thing-router.js'
-import { router as hookRouter } from './hook-router.js'
+import { router as thingRouter } from './thing-router.js'
 
 export const router = express.Router()
 
-router.use('/', issuesRouter)
-
-// Webhook: Create a route for the hook
-//router.use('/webhook', hookRouter)
+router.use('/', thingRouter)
 
 // Catch 404 (ALWAYS keep this as the last route).
 router.use('*', (req, res, next) => next(createError(404)))
