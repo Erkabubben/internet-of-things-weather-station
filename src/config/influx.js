@@ -75,6 +75,31 @@ export const connectDB = async () => {
         tags: []
       }
     )
+
+    const addTestData = true
+
+    function getRndInteger(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+    }
+
+    if (addTestData) {
+      for (let i = 1; i < 45; i++) {
+        for (let j = 0; j < 24; j++) {
+          let now = new Date()
+          now.setDate(now.getDate() - i)
+          now.setHours(j)
+          await client.writePoints([
+            {
+              measurement: 'readings',
+              tags: {},
+              fields: { temperature: getRndInteger(0, 40), humidity: getRndInteger(0, 100) },
+              timestamp: now
+            }
+          ])
+        }
+      }
+    }
+
     /*await client.writePoints([
       {
         measurement: 'readings',

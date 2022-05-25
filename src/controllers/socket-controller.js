@@ -43,6 +43,10 @@ export class SocketController {
     await this.updateLastReadings()
   }
 
+  async addTestData () {
+    
+  }
+
   async getLastReadings () {
     const results = await this.client.query(`
       select * from readings
