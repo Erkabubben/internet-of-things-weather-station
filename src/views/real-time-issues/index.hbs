@@ -37,12 +37,16 @@
     window.lastReadingsTemperatureChart = new Chart(ctx0, JSON.parse(JSON.stringify(baseChartSettings)))
     window.lastReadingsTemperatureChart.data.datasets[0].label = 'Temperature (Celsius)'
     window.lastReadingsTemperatureChart.data.datasets[0].borderColor = 'rgba(117, 20, 20, 1)'
+    window.lastReadingsTemperatureChart.data.labels = {{lastReadingsTimestamps}}
+    window.lastReadingsTemperatureChart.data.datasets[0].data = {{lastReadingsTemperature}}
     window.lastReadingsTemperatureChart.update()
 
     const ctx1 = document.getElementById('lastReadingsHumidityChart').getContext('2d');
     window.lastReadingsHumidityChart = new Chart(ctx1, JSON.parse(JSON.stringify(baseChartSettings)))
     window.lastReadingsHumidityChart.data.datasets[0].label = 'Humidity'
     window.lastReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
+    window.lastReadingsHumidityChart.data.labels = {{lastReadingsTimestamps}}
+    window.lastReadingsHumidityChart.data.datasets[0].data = {{lastReadingsHumidity}}
     window.lastReadingsHumidityChart.update()
 
     const ctx2 = document.getElementById('meanReadingsTemperatureChart').getContext('2d');

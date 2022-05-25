@@ -7,6 +7,7 @@
  */
 
 import fetch from 'node-fetch'
+import hbs from 'express-hbs'
 
 /**
  * Encapsulates a controller.
@@ -24,12 +25,13 @@ export class ThingController {
       let s = '['
       for (let i = 0; i < array.length; i++) {
         const element = array[i];
-        s += contentAreStrings ? "'" + element + "'" : element
+        s += contentAreStrings ? `'${element}'` : element
         if (i !== array.length - 1) {
           s += ', '
         }
       }
       s += ']'
+      console.log(s)
       return s
     }
 
@@ -38,9 +40,12 @@ export class ThingController {
       const meanReadings = await res.socketController.getMeanReadings()
       // Render the index page.
       res.render('real-time-issues/index', {
-        lastReadingsTimestamp: convertArrayToString(lastReadings.timestamps, true),
+        lastReadingsTimestamps: new hbs.SafeString(convertArrayToString(lastReadings.timestamps, true)),
         lastReadingsTemperature: convertArrayToString(lastReadings.temperature),
-        lastReadingsHumidity: convertArrayToString(lastReadings.humidity)
+        lastReadingsHumidity: convertArrayToString(lastReadings.humidity),
+        meanReadingsTimestamps: new hbs.SafeString(convertArrayToString(meanReadings.timestamps, true)),
+        meanReadingsTemperature: convertArrayToString(meanReadings.temperature),
+        meanReadingsHumidity: convertArrayToString(meanReadings.humidity)
       })
       await res.socketController.updateReadings()
     } catch (error) {
