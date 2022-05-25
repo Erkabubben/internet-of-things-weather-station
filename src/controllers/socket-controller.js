@@ -113,8 +113,8 @@ export class SocketController {
     const meanReadings = await this.getMeanReadings()
     // Socket.io: Send the updated issue to all subscribers.
     this.io.emit('update', {
-      temperature: 0,
-      humidity: 0,
+      temperature: lastReadings.temperature[lastReadings.temperature.length - 1],
+      humidity: lastReadings.humidity[lastReadings.humidity.length - 1],
       lastReadings: lastReadings,
       meanReadings: meanReadings
     })

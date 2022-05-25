@@ -26,7 +26,7 @@ socket.on('new-issue', arg => {
 socket.on('update', arg => {
     const tempText = document.querySelector('#temp')
     const humText = document.querySelector('#hum')
-    tempText.textContent = "TEMPERATURE: " + arg.temperature;
-    humText.textContent = "HUMIDITY: " + arg.humidity;
+    tempText.textContent = "Current temperature: " + arg.temperature + '°C';
+    humText.textContent = "Current humidity: " + arg.humidity;
     window.updateReadingsCharts(arg.lastReadings, arg.meanReadings)
 })

@@ -1,11 +1,13 @@
-<h1 class="center-header">READINGS</h1>
+<p id="temp">Current Temperature: {{currentTemperature}}°C</p>
+<p id="hum">Current Humidity: {{currentHumidity}}</p>
 
-<p id="temp">Temperature: </p>
-<p id="hum">Humidity: </p>
-
+<p>Most recent temperature readings:</p>
 <canvas id="lastReadingsTemperatureChart" width="100%" height="16px"></canvas>
+<p>Most recent humidity readings:</p>
 <canvas id="lastReadingsHumidityChart" width="100%" height="16px"></canvas>
+<p>Mean temperature / day:</p>
 <canvas id="meanReadingsTemperatureChart" width="100%" height="16px"></canvas>
+<p>Mean humidity / day:</p>
 <canvas id="meanReadingsHumidityChart" width="100%" height="16px"></canvas>
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script type="module">
