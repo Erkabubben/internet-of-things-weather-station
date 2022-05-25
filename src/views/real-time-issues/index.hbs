@@ -53,12 +53,16 @@
     window.meanReadingsTemperatureChart = new Chart(ctx2, JSON.parse(JSON.stringify(baseChartSettings)))
     window.meanReadingsTemperatureChart.data.datasets[0].label = 'Temperature (Celsius)'
     window.meanReadingsTemperatureChart.data.datasets[0].borderColor = 'rgba(117, 20, 20, 1)'
+    window.meanReadingsTemperatureChart.data.labels = {{meanReadingsTimestamps}}
+    window.meanReadingsTemperatureChart.data.datasets[0].data = {{meanReadingsTemperature}}
     window.meanReadingsTemperatureChart.update()
 
     const ctx3 = document.getElementById('meanReadingsHumidityChart').getContext('2d');
     window.meanReadingsHumidityChart = new Chart(ctx3, JSON.parse(JSON.stringify(baseChartSettings)))
     window.meanReadingsHumidityChart.data.datasets[0].label = 'Humidity'
     window.meanReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
+    window.meanReadingsHumidityChart.data.labels = {{meanReadingsTimestamps}}
+    window.meanReadingsHumidityChart.data.datasets[0].data = {{meanReadingsHumidity}}
     window.meanReadingsHumidityChart.update()
 
     window.updateReadingsCharts = function (lastReadings, meanReadings) {
