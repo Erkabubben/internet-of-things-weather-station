@@ -40,18 +40,15 @@ export class SocketController {
       }
     }, 10000 )
 
-    console.log(await this.client.getMeasurements())
     await this.updateLastReadings()
   }
 
-  async updateLastReadings () {
+  async getLastReadings () {
     const results = await this.client.query(`
       select * from readings
       order by time desc
       limit 10
     `)
-
-    console.log(Date.now())
 
     console.log(results)
 
@@ -80,6 +77,48 @@ export class SocketController {
       }
     })
 
+    return lastReadings
+  }
+
+  async getMonthReadings () {
+    const results = await this.client.query(`
+      select * from readings
+      order by time desc
+      limit 10
+    `)
+
+    console.log(results)
+
+    results.reverse()
+
+    const lastReadings = {}
+
+    lastReadings.temperature = []
+    lastReadings.humidity = []
+    lastReadings.timestamps = []
+
+    let lastValidReading = {}
+
+    results.forEach(reading => {
+      let formattedTime = reading.time.getHours() + ':' + reading.time.getMinutes() + ':' + reading.time.getSeconds()
+      if (reading.temperature !== '--' && reading.humidity !== '--') {
+        lastValidReading.temperature = reading.temperature
+        lastValidReading.humidity = reading.humidity
+        lastReadings.timestamps.push(formattedTime)
+        lastReadings.temperature.push(reading.temperature)
+        lastReadings.humidity.push(reading.humidity)
+      } else {
+        lastReadings.timestamps.push(formattedTime + (' (no reading)'))
+        lastReadings.temperature.push(lastValidReading.temperature)
+        lastReadings.humidity.push(lastValidReading.humidity)
+      }
+    })
+
+    return lastReadings
+  }
+
+  async updateLastReadings () {
+    const lastReadings = await this.getLastReadings()
     // Socket.io: Send the updated issue to all subscribers.
     this.io.emit('update', {
       temperature: 0,

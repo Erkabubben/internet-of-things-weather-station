@@ -24,17 +24,6 @@ socket.on('new-issue', arg => {
 
 // Listen for message "update issue" from the server
 socket.on('update', arg => {
-    // Use the template to create a new Issue element
-    /*const issueString = hbsTemplate(arg)
-    const newIssue = document.createElement('div')
-    newIssue.classList.add('issue')
-    newIssue.id = 'issueid_' + arg.issueid
-    newIssue.innerHTML = issueString
-
-    // Find the element with the same Issue ID in Issue list and replace it
-    const issueList = document.querySelector('#issue-list')
-    const oldIssue = issueList.querySelector('div#issueid_' + arg.issueid)
-    issueList.replaceChild(newIssue, oldIssue)*/
     const tempText = document.querySelector('#temp')
     const humText = document.querySelector('#hum')
     tempText.textContent = "TEMPERATURE: " + arg.temperature;

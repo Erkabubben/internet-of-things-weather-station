@@ -30,6 +30,7 @@ export class ThingController {
     try {
       // Render the index page.
       res.render('real-time-issues/index', {})
+      await res.socketController.updateLastReadings()
     } catch (error) {
       next(error)
     }

@@ -110,6 +110,10 @@ const main = async () => {
     })
   })
 
+  // Set up SocketController
+  const socketController = new SocketController(client, io)
+  await socketController.init()
+
   // Middleware to be executed before the routes.
   app.use((req, res, next) => {
     // Flash messages - survives only a round trip.
@@ -123,6 +127,9 @@ const main = async () => {
 
     // Socket.io: Add Socket.io to the Response-object to make it available in controllers.
     res.io = io
+
+    // Add SocketController to the Response-object to make it available in controllers.
+    res.socketController = socketController
 
     next()
   })
@@ -163,8 +170,7 @@ const main = async () => {
     console.log('Press Ctrl-C to terminate...')
   })
 
-  const socketController = new SocketController(client, io)
-  await socketController.init()
+
 }
 
 main().catch(console.error)
