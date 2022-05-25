@@ -75,13 +75,13 @@ export const connectDB = async () => {
         tags: []
       }
     )
-    await client.writePoints([
+    /*await client.writePoints([
       {
         measurement: 'readings',
         tags: {},
         fields: { temperature: 0, humidity: 0 }
       }
-    ])
+    ])*/
 
     console.log(await client.getMeasurements())
 

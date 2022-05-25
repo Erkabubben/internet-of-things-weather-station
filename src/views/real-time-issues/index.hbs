@@ -3,16 +3,43 @@
 <p id="temp">Temperature: </p>
 <p id="hum">Humidity: </p>
 
-<canvas id="mainChart" width="100%" height="32px"></canvas>
+<canvas id="lastReadingsTemperatureChart" width="100%" height="32px"></canvas>
+<canvas id="lastReadingsHumidityChart" width="100%" height="32px"></canvas>
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script type="module">
-    const ctx = document.getElementById('mainChart').getContext('2d');
-    window.mainChart = new Chart(ctx, {
+    const ctx0 = document.getElementById('lastReadingsTemperatureChart').getContext('2d');
+    window.lastReadingsTemperatureChart = new Chart(ctx0, {
         type: 'line',
         data: {
             labels: [1, 2, 3, 4, 5],
             datasets: [{
-                label: '# of summiters',
+                label: 'Temperature (Celsius)',
+                data: [1, 2, 3, 4, 5],
+                fill: false,
+                borderColor: 
+                    'rgba(117, 20, 20, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            legend: {
+                display: false
+            },
+        }
+    })
+
+    const ctx1 = document.getElementById('lastReadingsHumidityChart').getContext('2d');
+    window.lastReadingsHumidityChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+            labels: [1, 2, 3, 4, 5],
+            datasets: [{
+                label: 'Humidity',
                 data: [1, 2, 3, 4, 5],
                 fill: false,
                 borderColor: 
@@ -32,8 +59,12 @@
         }
     })
 
-    window.updateMainChart = function () {
-        window.mainChart.data.datasets[0].data = [22, 56, 11, 12, 4]
-        window.mainChart.update()
+    window.updateLastReadingsCharts = function (lastReadings) {
+        window.lastReadingsTemperatureChart.data.labels = lastReadings.timestamps
+        window.lastReadingsHumidityChart.data.labels = lastReadings.timestamps
+        window.lastReadingsTemperatureChart.data.datasets[0].data = lastReadings.temperature
+        window.lastReadingsHumidityChart.data.datasets[0].data = lastReadings.humidity
+        window.lastReadingsTemperatureChart.update()
+        window.lastReadingsHumidityChart.update()
     }
 </script>

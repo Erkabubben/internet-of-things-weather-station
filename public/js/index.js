@@ -39,5 +39,5 @@ socket.on('update', arg => {
     const humText = document.querySelector('#hum')
     tempText.textContent = "TEMPERATURE: " + arg.temperature;
     humText.textContent = "HUMIDITY: " + arg.humidity;
-    window.updateMainChart()
+    window.updateLastReadingsCharts(arg.lastReadings)
 })

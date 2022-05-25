@@ -24,6 +24,8 @@ import influx from 'influx'
 import { connectDB } from './config/influx.js'
 import { client } from './config/influx.js'
 
+import { SocketController } from './controllers/socket-controller.js'
+
 /**
  * The main function of the application.
  */
@@ -161,43 +163,8 @@ const main = async () => {
     console.log('Press Ctrl-C to terminate...')
   })
 
-  setInterval(async function () {
-    const url = 'http://192.168.0.107/readings'
-    const response = await fetch(url, {
-      method: 'GET'
-    })
-    if (response.status === 200) {
-      const responseText = await response.text()
-      const responseTextSplit = responseText.split(';')
-      console.log(responseText)
-
-      await client.writePoints([
-        {
-          measurement: 'readings',
-          tags: {},
-          fields: { temperature: responseTextSplit[0], humidity: responseTextSplit[1] }
-        }
-      ])
-
-      const results = await client.query(`
-        select * from readings
-        order by time desc
-        limit 3
-      `)
-
-      console.log(Date.now())
-
-      console.log(results)
-
-      // Socket.io: Send the updated issue to all subscribers.
-      io.emit('update', {
-        temperature: responseTextSplit[0],
-        humidity: responseTextSplit[1]
-      })
-    }
-  }, 10000 )
-
-  console.log(await client.getMeasurements())
+  const socketController = new SocketController(client, io)
+  await socketController.init()
 }
 
 main().catch(console.error)
