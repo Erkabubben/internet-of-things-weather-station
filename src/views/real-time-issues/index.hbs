@@ -5,8 +5,8 @@
 
 <canvas id="lastReadingsTemperatureChart" width="100%" height="16px"></canvas>
 <canvas id="lastReadingsHumidityChart" width="100%" height="16px"></canvas>
-<canvas id="monthReadingsTemperatureChart" width="100%" height="16px"></canvas>
-<canvas id="monthReadingsHumidityChart" width="100%" height="16px"></canvas>
+<canvas id="meanReadingsTemperatureChart" width="100%" height="16px"></canvas>
+<canvas id="meanReadingsHumidityChart" width="100%" height="16px"></canvas>
 <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script type="module">
     const baseChartSettings = {
@@ -45,24 +45,30 @@
     window.lastReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
     window.lastReadingsHumidityChart.update()
 
-    const ctx2 = document.getElementById('monthReadingsTemperatureChart').getContext('2d');
-    window.monthReadingsTemperatureChart = new Chart(ctx2, JSON.parse(JSON.stringify(baseChartSettings)))
-    window.monthReadingsTemperatureChart.data.datasets[0].label = 'Temperature (Celsius)'
-    window.monthReadingsTemperatureChart.data.datasets[0].borderColor = 'rgba(117, 20, 20, 1)'
-    window.monthReadingsTemperatureChart.update()
+    const ctx2 = document.getElementById('meanReadingsTemperatureChart').getContext('2d');
+    window.meanReadingsTemperatureChart = new Chart(ctx2, JSON.parse(JSON.stringify(baseChartSettings)))
+    window.meanReadingsTemperatureChart.data.datasets[0].label = 'Temperature (Celsius)'
+    window.meanReadingsTemperatureChart.data.datasets[0].borderColor = 'rgba(117, 20, 20, 1)'
+    window.meanReadingsTemperatureChart.update()
 
-    const ctx3 = document.getElementById('monthReadingsHumidityChart').getContext('2d');
-    window.monthReadingsHumidityChart = new Chart(ctx3, JSON.parse(JSON.stringify(baseChartSettings)))
-    window.monthReadingsHumidityChart.data.datasets[0].label = 'Humidity'
-    window.monthReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
-    window.monthReadingsHumidityChart.update()
+    const ctx3 = document.getElementById('meanReadingsHumidityChart').getContext('2d');
+    window.meanReadingsHumidityChart = new Chart(ctx3, JSON.parse(JSON.stringify(baseChartSettings)))
+    window.meanReadingsHumidityChart.data.datasets[0].label = 'Humidity'
+    window.meanReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
+    window.meanReadingsHumidityChart.update()
 
-    window.updateLastReadingsCharts = function (lastReadings) {
+    window.updateReadingsCharts = function (lastReadings, meanReadings) {
         window.lastReadingsTemperatureChart.data.labels = lastReadings.timestamps
         window.lastReadingsHumidityChart.data.labels = lastReadings.timestamps
+        window.meanReadingsTemperatureChart.data.labels = meanReadings.timestamps
+        window.meanReadingsHumidityChart.data.labels = meanReadings.timestamps
         window.lastReadingsTemperatureChart.data.datasets[0].data = lastReadings.temperature
         window.lastReadingsHumidityChart.data.datasets[0].data = lastReadings.humidity
+        window.meanReadingsTemperatureChart.data.datasets[0].data = meanReadings.temperature
+        window.meanReadingsHumidityChart.data.datasets[0].data = meanReadings.humidity
         window.lastReadingsTemperatureChart.update()
         window.lastReadingsHumidityChart.update()
+        window.meanReadingsTemperatureChart.update()
+        window.meanReadingsHumidityChart.update()
     }
 </script>

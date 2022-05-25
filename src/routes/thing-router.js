@@ -20,4 +20,4 @@ router.get('/', controller.index)
 //router.post('/:issueid/reopen', controller.reopen)
 //router.post('/:issueid/update', controller.update)
 
-router.get('/test', controller.test)
+//router.get('/test', controller.test)

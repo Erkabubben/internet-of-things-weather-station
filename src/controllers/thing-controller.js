@@ -12,13 +12,6 @@ import fetch from 'node-fetch'
  * Encapsulates a controller.
  */
 export class ThingController {
-  async test (req, res, next) {
-    try {
-      console.log('TEST!')
-    } catch (error) {
-      next(error)
-    }
-  }
   /**
    * Retrieves the Issues list from GitLab and displays the index page.
    *
@@ -27,10 +20,29 @@ export class ThingController {
    * @param {Function} next - Express next middleware function.
    */
   async index (req, res, next) {
+    function convertArrayToString (array, contentAreStrings) {
+      let s = '['
+      for (let i = 0; i < array.length; i++) {
+        const element = array[i];
+        s += contentAreStrings ? "'" + element + "'" : element
+        if (i !== array.length - 1) {
+          s += ', '
+        }
+      }
+      s += ']'
+      return s
+    }
+
     try {
+      const lastReadings = await res.socketController.getLastReadings()
+      const meanReadings = await res.socketController.getMeanReadings()
       // Render the index page.
-      res.render('real-time-issues/index', {})
-      await res.socketController.updateLastReadings()
+      res.render('real-time-issues/index', {
+        lastReadingsTimestamp: convertArrayToString(lastReadings.timestamps, true),
+        lastReadingsTemperature: convertArrayToString(lastReadings.temperature),
+        lastReadingsHumidity: convertArrayToString(lastReadings.humidity)
+      })
+      await res.socketController.updateReadings()
     } catch (error) {
       next(error)
     }
