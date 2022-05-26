@@ -8,7 +8,7 @@
 
 import express from 'express'
 import createError from 'http-errors'
-import { router as thingRouter } from './thing-router.js'
+import { router as thingRouter } from './dht11-weather-router.js'
 
 export const router = express.Router()
 

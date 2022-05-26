@@ -1,5 +1,5 @@
 /**
- * Routes for the Real Time Issues application.
+ * Routes for the DHT11 Weather application.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
@@ -7,11 +7,11 @@
  */
 
 import express from 'express'
-import { ThingController } from '../controllers/thing-controller.js'
+import { DHT11WeatherController } from '../controllers/dht11-weather-controller.js'
 
 export const router = express.Router()
 
-const controller = new ThingController()
+const controller = new DHT11WeatherController()
 
 // Map HTTP verbs and route paths to controller actions.
 router.get('/', controller.index)

@@ -18,12 +18,8 @@ import { router } from './routes/router.js'
 // Socket.io: To add Socket.io support
 import http from 'http'
 import { Server } from 'socket.io'
-import fetch from 'node-fetch'
 
-import influx from 'influx'
-import { connectDB } from './config/influx.js'
-import { client } from './config/influx.js'
-
+import { connectDB, client } from './config/influx.js'
 import { SocketController } from './controllers/socket-controller.js'
 
 /**
@@ -31,7 +27,7 @@ import { SocketController } from './controllers/socket-controller.js'
  */
 const main = async () => {
   // Checks that database is functional (no use starting the application otherwise).
-  const influxdb = await connectDB()
+  await connectDB()
 
   // Creates an Express application.
   const app = express()
@@ -169,8 +165,6 @@ const main = async () => {
     console.log(`Server running at http://localhost:${process.env.PORT}`)
     console.log('Press Ctrl-C to terminate...')
   })
-
-
 }
 
 main().catch(console.error)

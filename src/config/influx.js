@@ -66,7 +66,7 @@ export const connectDB = async () => {
     const addTestData = true
 
     if (addTestData) {
-      for (let i = 1; i < 45; i++) {
+      for (let i = 1; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
           let now = new Date()
           now.setDate(now.getDate() - i)

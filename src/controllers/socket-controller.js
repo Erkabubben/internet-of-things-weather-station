@@ -1,5 +1,5 @@
 /**
- * Module for the IssuesController.
+ * Module for the SocketController.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
@@ -7,7 +7,6 @@
  */
 
 import fetch from 'node-fetch'
-import influx from 'influx'
 
 /**
  * Encapsulates a controller.
@@ -94,8 +93,6 @@ export class SocketController {
         order by time desc
       `)
 
-      //console.log('read ' + i + ', ' + selectedDay + dateStr + ':' + (selectedDay.getMonth() + 1))
-
       if (results.length > 0) {
         meanReadings.timestamps.push((selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0'))
         meanReadings.temperature.push(results[0].mean)
@@ -113,7 +110,7 @@ export class SocketController {
   async updateReadings () {
     const lastReadings = await this.getLastReadings()
     const meanReadings = await this.getMeanReadings()
-    // Socket.io: Send the updated issue to all subscribers.
+    // Socket.io: Send the update to all subscribers.
     this.io.emit('update', {
       temperature: lastReadings.temperature[lastReadings.temperature.length - 1],
       humidity: lastReadings.humidity[lastReadings.humidity.length - 1],
