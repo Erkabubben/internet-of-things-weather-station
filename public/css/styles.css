@@ -15,6 +15,10 @@ body {
 ;
 }
 
+.current-header, #currentTemperature, #currentHumidity {
+  text-align: center;
+}
+
 .nav-item #peaks-form {
   background-color:	#304550f3;
   margin-left: 16px;

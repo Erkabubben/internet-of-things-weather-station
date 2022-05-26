@@ -70,7 +70,9 @@ export class SocketController {
     const lastValidReading = {}
 
     results.forEach(reading => {
-      const formattedTime = reading.time.getHours() + ':' + reading.time.getMinutes() + ':' + reading.time.getSeconds()
+      const formattedTime = reading.time.getHours().toString().padStart(2, '0') +
+        ':' + reading.time.getMinutes().toString().padStart(2, '0') +
+        ':' + reading.time.getSeconds().toString().padStart(2, '0')
       if (reading.temperature !== '--' && reading.humidity !== '--') {
         lastValidReading.temperature = reading.temperature
         lastValidReading.humidity = reading.humidity

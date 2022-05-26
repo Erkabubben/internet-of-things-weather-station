@@ -1,5 +1,7 @@
-<p id="temp">Current Temperature: {{currentTemperature}}°C</p>
-<p id="hum">Current Humidity: {{currentHumidity}}</p>
+<h3 class="current-header">Current Temperature</h3>
+<h1 id="currentTemperature">🌡 {{currentTemperature}}°C</h1>
+<h3 class="current-header">Current Humidity</h3>
+<h1 id="currentHumidity">💧 {{currentHumidity}}%</h1>
 
 <p>Most recent temperature readings:</p>
 <canvas id="lastReadingsTemperatureChart" width="100%" height="16px"></canvas>
@@ -45,7 +47,7 @@
 
     const ctx1 = document.getElementById('lastReadingsHumidityChart').getContext('2d');
     window.lastReadingsHumidityChart = new Chart(ctx1, JSON.parse(JSON.stringify(baseChartSettings)))
-    window.lastReadingsHumidityChart.data.datasets[0].label = 'Humidity'
+    window.lastReadingsHumidityChart.data.datasets[0].label = 'Humidity (percent)'
     window.lastReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
     window.lastReadingsHumidityChart.data.labels = {{lastReadingsTimestamps}}
     window.lastReadingsHumidityChart.data.datasets[0].data = {{lastReadingsHumidity}}
@@ -61,7 +63,7 @@
 
     const ctx3 = document.getElementById('meanReadingsHumidityChart').getContext('2d');
     window.meanReadingsHumidityChart = new Chart(ctx3, JSON.parse(JSON.stringify(baseChartSettings)))
-    window.meanReadingsHumidityChart.data.datasets[0].label = 'Humidity'
+    window.meanReadingsHumidityChart.data.datasets[0].label = 'Humidity (percent)'
     window.meanReadingsHumidityChart.data.datasets[0].borderColor = 'rgba(92, 122, 159, 1)'
     window.meanReadingsHumidityChart.data.labels = {{meanReadingsTimestamps}}
     window.meanReadingsHumidityChart.data.datasets[0].data = {{meanReadingsHumidity}}
