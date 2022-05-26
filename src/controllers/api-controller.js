@@ -7,12 +7,12 @@
  */
 
 function getLinks (req) {
-  var fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
+  const fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
   return {
-      index: fullUrl,
-      currentReadings: fullUrl + '/currentReadings',
-      lastTenReadings: fullUrl + '/lastTenReadings',
-      dailyAverageReadings: fullUrl + '/dailyAverageReadings'
+    index: fullUrl,
+    currentReadings: fullUrl + '/currentReadings',
+    lastTenReadings: fullUrl + '/lastTenReadings',
+    dailyAverageReadings: fullUrl + '/dailyAverageReadings'
   }
 }
 
@@ -66,10 +66,9 @@ export class APIController {
     const readings = await res.socketController.getMeanReadings(true)
     const data = []
     for (let i = 0; i < readings.timestamps.length; i++) {
-      const formattedDate = readings.timestamps[i].getFullYear()
-        + '-' + (readings.timestamps[i].getMonth()
-        + 1).toString().padStart(2, '0')
-        + '-' + readings.timestamps[i].getDate().toString().padStart(2, '0')
+      const formattedDate = readings.timestamps[i].getFullYear() +
+        '-' + (readings.timestamps[i].getMonth() + 1).toString().padStart(2, '0') +
+        '-' + readings.timestamps[i].getDate().toString().padStart(2, '0')
       data.push({
         timestamp: formattedDate,
         temperature: readings.temperature[i],

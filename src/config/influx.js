@@ -77,11 +77,6 @@ export const connectDB = async () => {
         }
       }
     }
-
-    const results = await client.query(`
-    select * from readings
-    order by time asc
-  `)
   }
 
   return client
