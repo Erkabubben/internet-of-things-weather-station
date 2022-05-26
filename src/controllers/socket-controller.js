@@ -84,18 +84,20 @@ export class SocketController {
     meanReadings.humidity = []
     meanReadings.timestamps = []
 
-    for (let i = 0; i < 31; i++) {
+    for (let i = 0; i < 45; i++) {
       let selectedDay = new Date()
       selectedDay.setDate(selectedDay.getDate() - i)
-      const dateStr = selectedDay.getFullYear() + '-' + selectedDay.getMonth().toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
+      const dateStr = selectedDay.getFullYear() + '-' + (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
       const results = await this.client.query(`
         select MEAN("temperature"), MEAN("humidity") from readings
         WHERE time >= '${dateStr}T00:00:00Z' AND time <= '${dateStr}T23:59:59Z'
         order by time desc
       `)
 
+      //console.log('read ' + i + ', ' + selectedDay + dateStr + ':' + (selectedDay.getMonth() + 1))
+
       if (results.length > 0) {
-        meanReadings.timestamps.push(selectedDay.getMonth().toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0'))
+        meanReadings.timestamps.push((selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0'))
         meanReadings.temperature.push(results[0].mean)
         meanReadings.humidity.push(results[0].mean_1)
       }
