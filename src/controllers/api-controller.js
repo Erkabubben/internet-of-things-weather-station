@@ -35,13 +35,28 @@ export class APIController {
 
   async currentReadings (req, res, next) {
     const readings = await res.socketController.getLastReadings(true)
-    console.log(readings)
     res.json({
       data: {
         timestamp: readings.timestamps[readings.timestamps.length - 1],
         temperature: readings.temperature[readings.temperature.length - 1],
         humidity: readings.humidity[readings.humidity.length - 1]
       },
+      links: getLinks(req)
+    })
+  }
+
+  async lastReadings (req, res, next) {
+    const readings = await res.socketController.getLastReadings(true)
+    const data = []
+    for (let i = 0; i < readings.timestamps.length; i++) {
+      data.push({
+        timestamp: readings.timestamps[i],
+        temperature: readings.temperature[i],
+        humidity: readings.humidity[i]
+      })
+    }
+    res.json({
+      data: data.reverse(),
       links: getLinks(req)
     })
   }

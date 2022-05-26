@@ -13,9 +13,7 @@ export const router = express.Router()
 
 const controller = new APIController()
 
-
 // Map HTTP verbs and route paths to controller actions.
 router.get('/', controller.index)
 router.get('/currentReadings', controller.currentReadings)
-
-// router.use('/images', imagesRouter)
+router.get('/lastTenReadings', controller.lastReadings)
