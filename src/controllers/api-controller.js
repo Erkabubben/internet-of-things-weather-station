@@ -7,8 +7,9 @@
  */
 
 function getLinks (req) {
-  var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl
+  var fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
   return {
+      index: fullUrl,
       currentReadings: fullUrl + '/currentReadings',
       lastTenReadings: fullUrl + '/lastTenReadings',
       dailyAverageReadings: fullUrl + '/dailyAverageReadings'
@@ -20,7 +21,7 @@ function getLinks (req) {
  */
 export class APIController {
   /**
-   * Retrieves the Issues list from GitLab and displays the index page.
+   * Returns the API welcome message and links to available routes.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -61,8 +62,23 @@ export class APIController {
     })
   }
 
-
-
-
-
+  async dailyAverageReadings (req, res, next) {
+    const readings = await res.socketController.getMeanReadings(true)
+    const data = []
+    for (let i = 0; i < readings.timestamps.length; i++) {
+      const formattedDate = readings.timestamps[i].getFullYear()
+        + '-' + (readings.timestamps[i].getMonth()
+        + 1).toString().padStart(2, '0')
+        + '-' + readings.timestamps[i].getDate().toString().padStart(2, '0')
+      data.push({
+        timestamp: formattedDate,
+        temperature: readings.temperature[i],
+        humidity: readings.humidity[i]
+      })
+    }
+    res.json({
+      data: data.reverse(),
+      links: getLinks(req)
+    })
+  }
 }

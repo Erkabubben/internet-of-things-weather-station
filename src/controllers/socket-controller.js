@@ -96,7 +96,7 @@ export class SocketController {
     meanReadings.humidity = []
     meanReadings.timestamps = []
 
-    for (let i = 0; i < 45; i++) {
+    for (let i = 0; i < 30; i++) {
       const selectedDay = new Date()
       selectedDay.setDate(selectedDay.getDate() - i)
       const dateStr = selectedDay.getFullYear() + '-' + (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
