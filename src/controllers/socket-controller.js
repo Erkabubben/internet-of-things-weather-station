@@ -52,7 +52,7 @@ export class SocketController {
   /**
    *
    */
-  async getLastReadings () {
+  async getLastReadings (displayFullTimeStamp = false) {
     const results = await this.client.query(`
       select * from readings
       order by time desc
@@ -74,11 +74,11 @@ export class SocketController {
       if (reading.temperature !== '--' && reading.humidity !== '--') {
         lastValidReading.temperature = reading.temperature
         lastValidReading.humidity = reading.humidity
-        lastReadings.timestamps.push(formattedTime)
+        lastReadings.timestamps.push(displayFullTimeStamp ? reading.time : formattedTime)
         lastReadings.temperature.push(reading.temperature)
         lastReadings.humidity.push(reading.humidity)
       } else {
-        lastReadings.timestamps.push(formattedTime + (' (no reading)'))
+        lastReadings.timestamps.push((displayFullTimeStamp ? reading.time : formattedTime) + (' (no reading)'))
         lastReadings.temperature.push(lastValidReading.temperature)
         lastReadings.humidity.push(lastValidReading.humidity)
       }
@@ -90,7 +90,7 @@ export class SocketController {
   /**
    *
    */
-  async getMeanReadings () {
+  async getMeanReadings (displayFullTimeStamp = false) {
     const meanReadings = {}
     meanReadings.temperature = []
     meanReadings.humidity = []
@@ -107,7 +107,10 @@ export class SocketController {
       `)
 
       if (results.length > 0) {
-        meanReadings.timestamps.push((selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0'))
+        meanReadings.timestamps.push(displayFullTimeStamp
+          ? selectedDay
+          : (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
+        )
         meanReadings.temperature.push(results[0].mean)
         meanReadings.humidity.push(results[0].mean_1)
       }

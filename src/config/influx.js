@@ -7,10 +7,6 @@
 
 import influx from 'influx'
 
-// DISCLAIMER: This is an example connection string. ALWAYS use an environment variable to store the connection string.
-// const CONNECTION_STRING = 'mongodb://localhost:27017/<name>'
-// const DB_CONNECTION_STRING = 'mongodb+srv://<dbuser>:<password>@<cluster>.mongodb.net/<name>?retryWrites=true&w=majority'
-
 export let client = ''
 
 /**
@@ -86,8 +82,6 @@ export const connectDB = async () => {
     select * from readings
     order by time asc
   `)
-
-    console.log(results)
   }
 
   return client
