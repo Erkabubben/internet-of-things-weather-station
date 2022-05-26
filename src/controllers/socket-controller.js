@@ -12,12 +12,19 @@ import fetch from 'node-fetch'
  * Encapsulates a controller.
  */
 export class SocketController {
+  /**
+   * @param client
+   * @param io
+   */
   constructor (client, io) {
     this.client = client
     this.io = io
   }
 
-  async init() {
+  /**
+   *
+   */
+  async init () {
     setInterval(async () => {
       const url = 'http://192.168.0.107/readings'
       const response = await fetch(url, {
@@ -26,7 +33,7 @@ export class SocketController {
       if (response.status === 200) {
         const responseText = await response.text()
         const responseTextSplit = responseText.split(';')
-  
+
         if (responseTextSplit[0] !== '--' && responseTextSplit[1] !== '--') {
           await this.client.writePoints([
             {
@@ -39,9 +46,12 @@ export class SocketController {
 
         await this.updateReadings()
       }
-    }, 10000 )
+    }, 10000)
   }
 
+  /**
+   *
+   */
   async getLastReadings () {
     const results = await this.client.query(`
       select * from readings
@@ -57,10 +67,10 @@ export class SocketController {
     lastReadings.humidity = []
     lastReadings.timestamps = []
 
-    let lastValidReading = {}
+    const lastValidReading = {}
 
     results.forEach(reading => {
-      let formattedTime = reading.time.getHours() + ':' + reading.time.getMinutes() + ':' + reading.time.getSeconds()
+      const formattedTime = reading.time.getHours() + ':' + reading.time.getMinutes() + ':' + reading.time.getSeconds()
       if (reading.temperature !== '--' && reading.humidity !== '--') {
         lastValidReading.temperature = reading.temperature
         lastValidReading.humidity = reading.humidity
@@ -77,6 +87,9 @@ export class SocketController {
     return lastReadings
   }
 
+  /**
+   *
+   */
   async getMeanReadings () {
     const meanReadings = {}
     meanReadings.temperature = []
@@ -84,7 +97,7 @@ export class SocketController {
     meanReadings.timestamps = []
 
     for (let i = 0; i < 45; i++) {
-      let selectedDay = new Date()
+      const selectedDay = new Date()
       selectedDay.setDate(selectedDay.getDate() - i)
       const dateStr = selectedDay.getFullYear() + '-' + (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
       const results = await this.client.query(`
@@ -107,6 +120,9 @@ export class SocketController {
     return meanReadings
   }
 
+  /**
+   *
+   */
   async updateReadings () {
     const lastReadings = await this.getLastReadings()
     const meanReadings = await this.getMeanReadings()
@@ -117,5 +133,5 @@ export class SocketController {
       lastReadings: lastReadings,
       meanReadings: meanReadings
     })
-  } 
+  }
 }

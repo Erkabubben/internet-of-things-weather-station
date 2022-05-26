@@ -11,13 +11,13 @@ import influx from 'influx'
 // const CONNECTION_STRING = 'mongodb://localhost:27017/<name>'
 // const DB_CONNECTION_STRING = 'mongodb+srv://<dbuser>:<password>@<cluster>.mongodb.net/<name>?retryWrites=true&w=majority'
 
-export let client = undefined
+export let client = ''
 
 /**
-* Establishes a connection to a database.
-*
-* @returns {Promise} Resolves to this if connection succeeded.
-*/
+ * Establishes a connection to a database.
+ *
+ * @returns {Promise} Resolves to this if connection succeeded.
+ */
 export const connectDB = async () => {
   // Connect to the server.
   client = new influx.InfluxDB({
@@ -40,7 +40,7 @@ export const connectDB = async () => {
 
   const databaseNames = await client.getDatabaseNames()
 
-  let containsReadingsDB = databaseNames.includes('readings_db');
+  let containsReadingsDB = databaseNames.includes('readings_db')
 
   if (containsReadingsDB && process.env.RESET_DB === 'true') {
     await client.dropDatabase('readings_db')
@@ -50,17 +50,16 @@ export const connectDB = async () => {
   if (!containsReadingsDB) {
     await client.createDatabase('readings_db')
     await client.addSchema({
-        measurement: 'readings',
-        fields: {
-          temperature: influx.FieldType.FLOAT,
-          humidity: influx.FieldType.FLOAT
-        },
-        tags: []
-      }
-    )
+      measurement: 'readings',
+      fields: {
+        temperature: influx.FieldType.FLOAT,
+        humidity: influx.FieldType.FLOAT
+      },
+      tags: []
+    })
 
-    function getRndInteger(min, max) {
-      return Math.floor(Math.random() * (max - min) ) + min;
+    function getRndInteger (min, max) {
+      return Math.floor(Math.random() * (max - min)) + min
     }
 
     const addTestData = true
@@ -68,15 +67,15 @@ export const connectDB = async () => {
     if (addTestData) {
       for (let i = 1; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
-          let now = new Date()
-          now.setDate(now.getDate() - i)
-          now.setHours(j)
+          const date = new Date()
+          date.setDate(date.getDate() - i)
+          date.setHours(j)
           await client.writePoints([
             {
               measurement: 'readings',
               tags: {},
               fields: { temperature: getRndInteger(0, 40), humidity: getRndInteger(0, 100) },
-              timestamp: now
+              timestamp: date
             }
           ])
         }

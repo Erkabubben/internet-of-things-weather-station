@@ -20,10 +20,14 @@ export class DHT11WeatherController {
    * @param {Function} next - Express next middleware function.
    */
   async index (req, res, next) {
+    /**
+     * @param array
+     * @param contentAreStrings
+     */
     function convertArrayToString (array, contentAreStrings) {
       let s = '['
       for (let i = 0; i < array.length; i++) {
-        const element = array[i];
+        const element = array[i]
         s += contentAreStrings ? `'${element}'` : element
         if (i !== array.length - 1) {
           s += ', '
