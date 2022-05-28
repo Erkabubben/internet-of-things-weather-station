@@ -1,7 +1,7 @@
 /**
- * Mongoose configuration.
+ * InfluxDB configuration.
  *
- * @author Mats Loock
+ * @author Erik Lindholm
  * @version 1.0.0
  */
 
@@ -10,12 +10,10 @@ import influx from 'influx'
 export let client = ''
 
 /**
- * Establishes a connection to a database.
- *
- * @returns {Promise} Resolves to this if connection succeeded.
+ * Initiates the InfluxDB database.
  */
 export const connectDB = async () => {
-  // Connect to the server.
+  // Creates an InfluxDB JavaScript client.
   client = new influx.InfluxDB({
     database: 'readings_db',
     host: 'localhost',
@@ -24,6 +22,7 @@ export const connectDB = async () => {
     password: process.env.INFLUXDB_ADMIN_PASSWORD
   })
 
+  // Tests the InfluxDB connection.
   client.ping(5000).then(hosts => {
     hosts.forEach(host => {
       if (host.online) {
@@ -34,8 +33,9 @@ export const connectDB = async () => {
     })
   })
 
+  // Checks whether the InfluxDB instance contains database readings_db. If it doesn't, or if
+  // environment variable RESET_DB is set to true, creates a new readings_db database.
   const databaseNames = await client.getDatabaseNames()
-
   let containsReadingsDB = databaseNames.includes('readings_db')
 
   if (containsReadingsDB && process.env.RESET_DB === 'true') {
@@ -54,11 +54,20 @@ export const connectDB = async () => {
       tags: []
     })
 
+    /**
+     * Utility function for returning a random number between the provided min and max values.
+     *
+     * @param {number} min - The minimum number returned (inclusive).
+     * @param {number} max - The maximum number returned (exclusive).
+     * @returns {number} - A number between the min and max values.
+     */
     function getRndInteger (min, max) {
       return Math.floor(Math.random() * (max - min)) + min
     }
 
-    const addTestData = true
+    // Set to true if you want to add some test data on startup. Should only be used
+    // during development!
+    const addTestData = false
 
     if (addTestData) {
       for (let i = 1; i < 5; i++) {
@@ -78,6 +87,4 @@ export const connectDB = async () => {
       }
     }
   }
-
-  return client
 }

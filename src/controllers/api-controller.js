@@ -6,6 +6,12 @@
  * @version 1.0.0
  */
 
+/**
+ * Gets an object containing the list of links used to navigate the API.
+ *
+ * @param {object} req - Express request object.
+ * @returns {object} - An object containing the list of links used to navigate the API.
+ */
 function getLinks (req) {
   const fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
   return {
@@ -34,6 +40,13 @@ export class APIController {
     })
   }
 
+  /**
+   * Responds with the most current readings from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async currentReadings (req, res, next) {
     const readings = await res.socketController.getLastReadings(true)
     res.json({
@@ -46,6 +59,13 @@ export class APIController {
     })
   }
 
+  /**
+   * Responds with the ten last readings from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async lastReadings (req, res, next) {
     const readings = await res.socketController.getLastReadings(true)
     const data = []
@@ -62,6 +82,13 @@ export class APIController {
     })
   }
 
+  /**
+   * Responds with a list of daily average readings from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async dailyAverageReadings (req, res, next) {
     const readings = await res.socketController.getMeanReadings(true)
     const data = []

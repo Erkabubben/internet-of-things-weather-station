@@ -26,7 +26,7 @@ import { SocketController } from './controllers/socket-controller.js'
  * The main function of the application.
  */
 const main = async () => {
-  // Checks that database is functional (no use starting the application otherwise).
+  // Initiates the InfluxDB database.
   await connectDB()
 
   // Creates an Express application.
@@ -124,7 +124,7 @@ const main = async () => {
     // Socket.io: Add Socket.io to the Response-object to make it available in controllers.
     res.io = io
 
-    // Add SocketController to the Response-object to make it available in controllers.
+    // SocketController: Add SocketController to the Response-object to make it available in controllers.
     res.socketController = socketController
 
     next()
