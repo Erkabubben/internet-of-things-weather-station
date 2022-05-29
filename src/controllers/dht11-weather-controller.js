@@ -56,7 +56,6 @@ export class DHT11WeatherController {
         currentTemperature: lastReadings.temperature[lastReadings.temperature.length - 1],
         currentHumidity: lastReadings.humidity[lastReadings.humidity.length - 1]
       })
-      await res.socketController.updateReadings()
     } catch (error) {
       next(error)
     }

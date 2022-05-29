@@ -15,6 +15,8 @@ const controller = new APIController()
 
 // Map HTTP verbs and route paths to controller actions.
 router.get('/', controller.index)
-router.get('/currentReadings', controller.currentReadings)
-router.get('/lastTenReadings', controller.lastReadings)
-router.get('/dailyAverageReadings', controller.dailyAverageReadings)
+router.get('/current-readings', controller.currentReadings)
+router.get('/last-ten-readings', controller.lastReadings)
+router.get('/daily-average-readings', controller.dailyAverageReadings)
+
+router.post('/message-from-sensor', controller.messageFromSensor)

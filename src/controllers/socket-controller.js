@@ -6,8 +6,6 @@
  * @version 1.0.0
  */
 
-import fetch from 'node-fetch'
-
 /**
  * Encapsulates a controller.
  */
@@ -24,55 +22,12 @@ export class SocketController {
   }
 
   /**
-   * Initiates the SocketController by setting up a time interval for making GET requests
-   * to the ESP32, updating the InfluxDB data and currently Socket.io-connected clients.
-   */
-  async init () {
-    setInterval(async () => {
-      const url = process.env.DHT11_READINGS_URI
-      try {
-        // Makes a GET request to the ESP32.
-        const response = await fetch(url, {
-          method: 'GET'
-        })
-        if (response.status === 200) {
-          const responseText = await response.text()
-          const responseTextSplit = responseText.split(';')
-          // If the request returns a successful reading, add it to the InfluxDB database.
-          if (responseTextSplit[0] !== '--' && responseTextSplit[1] !== '--') {
-            await this.client.writePoints([
-              {
-                measurement: 'readings',
-                tags: {},
-                fields: { temperature: responseTextSplit[0], humidity: responseTextSplit[1] }
-              }
-            ])
-          }
-          // Then, update all clients connected through Socket.io.
-          await this.updateReadings()
-        }
-      } catch (error) {
-        console.log('ERROR: No response from sensor!')
-      }
-    // The environment variable SENSOR_REQUEST_FREQUENCY_MS determines the GET request frequency.
-    }, process.env.SENSOR_REQUEST_FREQUENCY_MS)
-  }
-
-  /**
    * Retrieves the last 10 readings from InfluxDB and returns their contents as an object with arrays.
    *
    * @param {boolean} displayFullTimeStamp - Determines the format of the returned timestamps.
    * @returns {object} - An object with arrays of timestamps as well as temperature and humidity values.
    */
   async getLastReadings (displayFullTimeStamp = false) {
-    const results = await this.client.query(`
-      select * from readings
-      order by time desc
-      limit 10
-    `)
-
-    results.reverse()
-
     const lastReadings = {}
 
     lastReadings.temperature = []
@@ -81,20 +36,32 @@ export class SocketController {
 
     const lastValidReading = {}
 
+    const results = await this.client.query(`
+      select * from readings
+      order by time desc
+      limit 10
+    `)
+
+    results.reverse()
+
     results.forEach(reading => {
-      const formattedTime = reading.time.getHours().toString().padStart(2, '0') +
+      try {
+        const formattedTime = reading.time.getHours().toString().padStart(2, '0') +
         ':' + reading.time.getMinutes().toString().padStart(2, '0') +
         ':' + reading.time.getSeconds().toString().padStart(2, '0')
-      if (reading.temperature !== '--' && reading.humidity !== '--') {
-        lastValidReading.temperature = reading.temperature
-        lastValidReading.humidity = reading.humidity
-        lastReadings.timestamps.push(displayFullTimeStamp ? reading.time : formattedTime)
-        lastReadings.temperature.push(reading.temperature)
-        lastReadings.humidity.push(reading.humidity)
-      } else {
-        lastReadings.timestamps.push((displayFullTimeStamp ? reading.time : formattedTime) + (' (no reading)'))
-        lastReadings.temperature.push(lastValidReading.temperature)
-        lastReadings.humidity.push(lastValidReading.humidity)
+        if (reading.temperature !== '--' && reading.humidity !== '--') {
+          lastValidReading.temperature = reading.temperature
+          lastValidReading.humidity = reading.humidity
+          lastReadings.timestamps.push(displayFullTimeStamp ? reading.time : formattedTime)
+          lastReadings.temperature.push(reading.temperature)
+          lastReadings.humidity.push(reading.humidity)
+        } else {
+          lastReadings.timestamps.push((displayFullTimeStamp ? reading.time : formattedTime) + (' (no reading)'))
+          lastReadings.temperature.push(lastValidReading.temperature)
+          lastReadings.humidity.push(lastValidReading.humidity)
+        }
+      } catch (error) {
+        console.log('ERROR: getLastReadings')
       }
     })
 
@@ -115,23 +82,28 @@ export class SocketController {
     meanReadings.timestamps = []
 
     for (let i = 0; i < 30; i++) {
-      const selectedDay = new Date()
-      selectedDay.setDate(selectedDay.getDate() - i)
-      const dateStr = selectedDay.getFullYear() + '-' + (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
-      const results = await this.client.query(`
-        select MEAN("temperature"), MEAN("humidity") from readings
-        WHERE time >= '${dateStr}T00:00:00Z' AND time <= '${dateStr}T23:59:59Z'
-        order by time desc
-      `)
-
-      if (results.length > 0) {
-        meanReadings.timestamps.push(displayFullTimeStamp
-          ? selectedDay
-          : (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
-        )
-        meanReadings.temperature.push(results[0].mean)
-        meanReadings.humidity.push(results[0].mean_1)
+      try {
+        const selectedDay = new Date()
+        selectedDay.setDate(selectedDay.getDate() - i)
+        const dateStr = selectedDay.getFullYear() + '-' + (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
+        const results = await this.client.query(`
+          select MEAN("temperature"), MEAN("humidity") from readings
+          WHERE time >= '${dateStr}T00:00:00Z' AND time <= '${dateStr}T23:59:59Z'
+          order by time desc
+        `)
+  
+        if (results.length > 0) {
+          meanReadings.timestamps.push(displayFullTimeStamp
+            ? selectedDay
+            : (selectedDay.getMonth() + 1).toString().padStart(2, '0') + '-' + selectedDay.getDate().toString().padStart(2, '0')
+          )
+          meanReadings.temperature.push(results[0].mean)
+          meanReadings.humidity.push(results[0].mean_1)
+        }
+      } catch (error) {
+        console.log('ERROR: getMeanReadings')
       }
+
     }
 
     meanReadings.timestamps.reverse()

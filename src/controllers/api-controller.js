@@ -16,9 +16,9 @@ function getLinks (req) {
   const fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
   return {
     index: fullUrl,
-    currentReadings: fullUrl + '/currentReadings',
-    lastTenReadings: fullUrl + '/lastTenReadings',
-    dailyAverageReadings: fullUrl + '/dailyAverageReadings'
+    currentReadings: fullUrl + '/current-readings',
+    lastTenReadings: fullUrl + '/last-ten-readings',
+    dailyAverageReadings: fullUrl + '/daily-average-readings'
   }
 }
 
@@ -107,4 +107,34 @@ export class APIController {
       links: getLinks(req)
     })
   }
+
+  /**
+   * Used by the ESP32 device to send sensor readings. Readings are added to the
+   * database, and then Socket.io-connected clients are updated.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+     async messageFromSensor (req, res, next) {
+      //console.log('Message from sensor arrived: ' + req.body.readings)
+      try {
+        const requestTextSplit = req.body.readings.split(';')
+        // If the request returns a successful reading, add it to the InfluxDB database.
+        if (requestTextSplit[0] !== '--' && requestTextSplit[1] !== '--') {
+          await res.socketController.client.writePoints([
+            {
+              measurement: 'readings',
+              tags: {},
+              fields: { temperature: requestTextSplit[0], humidity: requestTextSplit[1] }
+            }
+          ])
+        }
+        // Then, update all clients connected through Socket.io.
+        await res.socketController.updateReadings()
+        res.status(200).send('Message accepted.')
+      } catch (error) {
+        console.log('ERROR: Problem with incoming message.')
+      }
+    }
 }

@@ -108,7 +108,6 @@ const main = async () => {
 
   // Set up SocketController
   const socketController = new SocketController(client, io)
-  await socketController.init()
 
   // Middleware to be executed before the routes.
   app.use((req, res, next) => {
