@@ -116,25 +116,25 @@ export class APIController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-     async messageFromSensor (req, res, next) {
-      //console.log('Message from sensor arrived: ' + req.body.readings)
-      try {
-        const requestTextSplit = req.body.readings.split(';')
-        // If the request returns a successful reading, add it to the InfluxDB database.
-        if (requestTextSplit[0] !== '--' && requestTextSplit[1] !== '--') {
-          await res.socketController.client.writePoints([
-            {
-              measurement: 'readings',
-              tags: {},
-              fields: { temperature: requestTextSplit[0], humidity: requestTextSplit[1] }
-            }
-          ])
-        }
-        // Then, update all clients connected through Socket.io.
-        await res.socketController.updateReadings()
-        res.status(200).send('Message accepted.')
-      } catch (error) {
-        console.log('ERROR: Problem with incoming message.')
+  async messageFromSensor (req, res, next) {
+    // console.log('Message from sensor arrived: ' + req.body.readings)
+    try {
+      const requestTextSplit = req.body.readings.split(';')
+      // If the request returns a successful reading, add it to the InfluxDB database.
+      if (requestTextSplit[0] !== '--' && requestTextSplit[1] !== '--') {
+        await res.socketController.client.writePoints([
+          {
+            measurement: 'readings',
+            tags: {},
+            fields: { temperature: requestTextSplit[0], humidity: requestTextSplit[1] }
+          }
+        ])
       }
+      // Then, update all clients connected through Socket.io.
+      await res.socketController.updateReadings()
+      res.status(200).send('Message accepted.')
+    } catch (error) {
+      console.log('ERROR: Problem with incoming message.')
     }
+  }
 }

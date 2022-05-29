@@ -91,7 +91,7 @@ export class SocketController {
           WHERE time >= '${dateStr}T00:00:00Z' AND time <= '${dateStr}T23:59:59Z'
           order by time desc
         `)
-  
+
         if (results.length > 0) {
           meanReadings.timestamps.push(displayFullTimeStamp
             ? selectedDay
@@ -103,7 +103,6 @@ export class SocketController {
       } catch (error) {
         console.log('ERROR: getMeanReadings')
       }
-
     }
 
     meanReadings.timestamps.reverse()
