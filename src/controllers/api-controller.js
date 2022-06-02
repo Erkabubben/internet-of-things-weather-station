@@ -13,7 +13,7 @@
  * @returns {object} - An object containing the list of links used to navigate the API.
  */
 function getLinks (req) {
-  const fullUrl = req.protocol + '://' + req.get('host') + '/api/v1'
+  const fullUrl = req.protocol + '://' + process.env.APP_URI + '/api/v1'
   return {
     index: fullUrl,
     currentReadings: fullUrl + '/current-readings',
@@ -126,7 +126,7 @@ export class APIController {
           {
             measurement: 'readings',
             tags: {},
-            fields: { temperature: requestTextSplit[0], humidity: requestTextSplit[1] }
+            fields: { temperature: parseFloat(requestTextSplit[0]), humidity: parseFloat(requestTextSplit[1]) }
           }
         ])
       }
@@ -135,6 +135,7 @@ export class APIController {
       res.status(200).send('Message accepted.')
     } catch (error) {
       console.log('ERROR: Problem with incoming message.')
+      console.log(error)
     }
   }
 }

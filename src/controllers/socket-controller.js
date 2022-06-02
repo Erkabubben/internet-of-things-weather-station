@@ -61,7 +61,7 @@ export class SocketController {
           lastReadings.humidity.push(lastValidReading.humidity)
         }
       } catch (error) {
-        console.log('ERROR: getLastReadings')
+        console.log(error)
       }
     })
 
@@ -89,7 +89,6 @@ export class SocketController {
         const results = await this.client.query(`
           select MEAN("temperature"), MEAN("humidity") from readings
           WHERE time >= '${dateStr}T00:00:00Z' AND time <= '${dateStr}T23:59:59Z'
-          order by time desc
         `)
 
         if (results.length > 0) {
@@ -101,7 +100,7 @@ export class SocketController {
           meanReadings.humidity.push(results[0].mean_1)
         }
       } catch (error) {
-        console.log('ERROR: getMeanReadings')
+        console.log(error)
       }
     }
 

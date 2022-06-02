@@ -37,13 +37,17 @@ export const connectDB = async () => {
   // environment variable RESET_DB is set to true, creates a new readings_db database.
   const databaseNames = await client.getDatabaseNames()
   let containsReadingsDB = databaseNames.includes('readings_db')
+  console.log('containsReadingsDB set to ' + containsReadingsDB + '.')
 
   if (containsReadingsDB && process.env.RESET_DB === 'true') {
     await client.dropDatabase('readings_db')
+    console.log('Database "readings_db" was dropped.')
     containsReadingsDB = false
+    console.log('containsReadingsDB set to ' + containsReadingsDB + ' as no database was found.')
   }
 
   if (!containsReadingsDB) {
+    console.log('Creating new database "readings_db"...')
     await client.createDatabase('readings_db')
     await client.addSchema({
       measurement: 'readings',
@@ -67,10 +71,10 @@ export const connectDB = async () => {
 
     // Set to true if you want to add some test data on startup. Should only be used
     // during development!
-    const addTestData = false
+    const addTestData = (process.env.ADD_TEST_DATA === 'true')
 
     if (addTestData) {
-      for (let i = 1; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
           const date = new Date()
           date.setDate(date.getDate() - i)
