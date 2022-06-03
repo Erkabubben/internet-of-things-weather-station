@@ -1,8 +1,8 @@
 # DHT11 Weather Station
 by Erik Lindholm (elimk06@student.lnu.se)</b>
-<br><br>![ESP32](./report-img/project-0.jpg)<br>
+<br><br>[![ESP32](./report-img/project-0.jpg)](https://drive.google.com/file/d/1zn3unwPw_MDlTMTReGX_4Sb3emL21y7W/view?usp=sharing)<br>
 
-Video presentation: https://drive.google.com/file/d/1zn3unwPw_MDlTMTReGX_4Sb3emL21y7W/view?usp=sharing
+[Video presentation](https://drive.google.com/file/d/1zn3unwPw_MDlTMTReGX_4Sb3emL21y7W/view?usp=sharing)
 
 ---
 
@@ -18,11 +18,11 @@ Since I had some experience of C programming, I chose to use the Arduino IDE wit
 The choice of the ESP32 as the platform was mainly due to it being available at a good price. While I was considering using LoRaWan or some other wireless solution, the fact that the ESP32 had built-in WiFi connectivity aligned well with the ambition of starting out simple. 
 
 ## Materials
-I ended up purchasing all the materials in two orders from Sizeable.se, which turned out to have very good prices. Both orders arrived the day after they had been placed. In order to build the DHT11 Weather Station, you will need the following (all images are taken from Sizable.se):
+I ended up purchasing all the materials in two orders from Sizable.se, which turned out to have very good prices. Both orders arrived the day after they had been placed. In order to build the DHT11 Weather Station, you will need the following (all images are taken from Sizable.se):
 
 ### ESP32 device (94 SEK)
 
-![ESP32](./report-img/esp32.jpg)
+[![ESP32](./report-img/esp32.jpg)](https://sizable.se/P.CE9S1/ESP32)
 
 https://sizable.se/P.CE9S1/ESP32
 
@@ -30,7 +30,7 @@ This is the microcontroller that is running the DHT11 sensor and regularly sends
 
 ### DHT11 Temperature and Humidity Sensor (28 SEK)
 
-![DHT11 Temperature and Humidity Sensor](./report-img/dht11.jpg)
+[![DHT11 Temperature and Humidity Sensor](./report-img/dht11.jpg)](https://sizable.se/P.WGXR4/DHT11-Temperatur-och-luftfuktighetssensor)
 
 https://sizable.se/P.WGXR4/DHT11-Temperatur-och-luftfuktighetssensor
 
@@ -38,7 +38,7 @@ A cheap, basic sensor for measuring temperature and humidity.
 
 ### Micro USB cable (18 SEK)
 
-![Micro USB cable](./report-img/micro-usb-cable.jpg)
+[![Micro USB cable](./report-img/micro-usb-cable.jpg)](https://sizable.se/P.VC1YX/Micro-USB-kabel-50-cm)
 
 https://sizable.se/P.VC1YX/Micro-USB-kabel-50-cm
 
@@ -50,13 +50,13 @@ You can connect the DHT11 to the ESP32 either by using male-female cables and a 
 
 ### Breadboard (34 SEK)
 
-![Breadboard](./report-img/breadboard.jpg)
+[![Breadboard](./report-img/breadboard.jpg)](https://sizable.se/P.SFGYT/Kopplingsdack-med-400-punkter)
 
 https://sizable.se/P.SFGYT/Kopplingsdack-med-400-punkter
 
 ### Cables, male/female (24 SEK)
 
-![Cables, male/female](./report-img/cables-m-f.jpg)
+[![Cables, male/female](./report-img/cables-m-f.jpg)](https://sizable.se/P.3V1BE/Dupont-kopplingskablar-Hane-Hona-40-pin)
 
 https://sizable.se/P.3V1BE/Dupont-kopplingskablar-Hane-Hona-40-pin
 
@@ -64,17 +64,17 @@ https://sizable.se/P.3V1BE/Dupont-kopplingskablar-Hane-Hona-40-pin
 
 ### Cables, female/female (24 SEK)
 
-![Cables, female/female](./report-img/cables-f-f.jpg)
+[![Cables, female/female](./report-img/cables-f-f.jpg)](https://sizable.se/P.4LTWU/Dupont-kopplingskablar-Hona-Hona-40-pin)
 
 https://sizable.se/P.4LTWU/Dupont-kopplingskablar-Hona-Hona-40-pin
 
 The total price for option 1 is <b>198 SEK</b>, and <b>164 SEK</b> for option 2.
 
 ## Basic Arduino IDE and ESP32 setup
-After connecting the ESP32 to the computer by the USB cable, I installed the Arduino IDE and followed the steps in the tutorial <i>Installing the ESP32 Board in Arduino IDE</i> (https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/).
+After connecting the ESP32 to the computer by the USB cable, I installed the Arduino IDE and followed the steps in the tutorial [<i>Installing the ESP32 Board in Arduino IDE</i>](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/).
 
 ## Connecting the DHT11 sensor
-Once the code was successfully running, I proceeded to follow the tutorial <i>ESP32 with DHT11/DHT22 Temperature and Humidity Sensor using Arduino IDE</i> (https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-sensor-arduino-ide/).<br>
+Once the code was successfully running, I proceeded to follow the tutorial [<i>ESP32 with DHT11/DHT22 Temperature and Humidity Sensor using Arduino IDE</i>](https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-sensor-arduino-ide/).<br>
 I first tried to follow the circuit diagrams provided in the tutorial, but every time I closed the circuit the ESP32 would disconnect. I also noticed that it quickly got very hot on the underside of the USB-port.<br>
 At first, I thought the problem was that I had skipped connecting a resistor despite the circuit diagram showing one (the tutorial says that the DHT11:s mounted on a breakout board already has a resistor built in). So, I ordered a set of resistors and other components and added one to the circuit.<br>
 However, the problem persisted. When bringing up the issue during tutoring, I was adviced to skip both the resistor and the breadboard and just connect the ESP32 and DHT11 directly. I still had to use the breadboard since I didn't have any female-female cables, but after simplifying the circuit the LEDs on both the ESP32 and the DHT11 lit up and the console immediately started outputting sensor readings.<br>
@@ -83,7 +83,7 @@ Despite being beginners-level, the tutorial I followed didn't mention the risk o
 ## Should the ESP32 act as a client or a server?
 After successfully outputting sensor readings in the Arduino IDE - and testing the sensor by breathing on it and exposing it to the heat of my coffee cup - I started working on the web interface and API. I found another tutorial at randomnerdtutorials.com describing how to set up the ESP32 and sensor as a web server, so my first solution was to have the CSCloud web application send regular GET-requests to the ESP32, which would respond with sensor readings.<br>
 This turned out to be the wrong approach, but it worked out well as long as I was only running the application locally. When I uploaded the application to CSCloud, it wouldn't recognize the ESP32 as it was hidden behind my router. I explored the option of configuring my router to expose the ESP32, but soon realized that this would only temporarily fix the issue - if I were to move the ESP32 to another WiFi network, I would have to go through the same process again.<br>
-It seemed to be a much better solution to redesign both the web application and the ESP32 code so that the ESP32 would act as a client, and regularly send POST-requests with sensor readings to a route on the web application. Following another tutorial, I started by reprogramming the ESP32: https://randomnerdtutorials.com/esp32-http-get-post-arduino/<br>
+It seemed to be a much better solution to redesign both the web application and the ESP32 code so that the ESP32 would act as a client, and regularly send POST-requests with sensor readings to a route on the web application. Following [another tutorial at randomnerdtutorials.com](https://randomnerdtutorials.com/esp32-http-get-post-arduino/), I started by reprogramming the ESP32. <br>
 After uploading the redesigned application to CSCloud, the temperature readings would update as expected in the web interface.
 
 ## The web interface and the API
